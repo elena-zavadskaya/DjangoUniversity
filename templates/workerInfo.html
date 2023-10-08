@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Информация о сотруднике</title>
+        {% load django_bootstrap5 %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% load static %}
+        <link rel = "stylesheet" type="text/css" href="{% static 'css/show_info.css' %}"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    </head>
+    <body>
+        <div class="card">
+          <div class="ds-top"></div>
+          <div class="avatar-holder">
+            <img src="https://www.gravatar.com/avatar/%7B%7B link_img }}?s=100&d=retro" alt="Albert Einstein">
+          </div>
+          <div class="name">
+            {{ worker.first_name }} {{ worker.last_name }}
+          </div>
+          <div class="ds-info">
+            <div class="ds pens">
+                <i class="bi bi-patch-check"></i><h6 title="Number of pens created by the user">Команда</h6>
+              <p>{{ worker.team }}</p>
+            </div>
+            <div class="ds projects">
+                <i class="bi bi-chat-square-heart"></i><h6 title="Number of pens created by the user">id пользователя</h6>
+                {{ worker.id_user }}
+            </div>
+            <div class="ds posts">
+              <i class="bi bi-people-fill"></i><h6 title="Number of pens created by the user">Дата рождения</h6>
+              <p>{{ worker.date_birth }}</p>
+            </div>
+          </div>
+
+            <table class="table ds-skill" style="color: #fff">
+          <thead>
+            <tr>
+              <th scope="col">Номер задания</th>
+              <th scope="col">Тимлид</th>
+              <th scope="col">Статус</th>
+              <th scope="col">Дата сдачи</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+    </body>
+</html>

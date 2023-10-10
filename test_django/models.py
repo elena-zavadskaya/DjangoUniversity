@@ -85,6 +85,8 @@ class Leader(models.Model):
 
 
 class Task(models.Model):
+    number = IntegerRangeField(min_value=0, default=1, verbose_name="Номер задания",
+                               help_text="Введите номер задания", null=False, blank=False)
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE, verbose_name="Работник",
                                help_text="Выберите работника", null=False, blank=False)
     leader = models.ForeignKey(Leader, on_delete=models.CASCADE, verbose_name="Тимлид команды",

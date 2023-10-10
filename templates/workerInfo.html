@@ -52,13 +52,12 @@
                     {% else %}
                         <tr>
                     {% endif %}
-                            <th scope="row">1</th>
+                            <th scope="row">{{ task.number }}</th>
                             <td>{{ task.leader }}</td>
                             <td>{{ task.task_status }}</td>
                             <td>{{ task.date_control }}</td>
                         </tr>
                 {% endfor %}
-
           </tbody>
         </table>
         </div>

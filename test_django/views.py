@@ -2,10 +2,19 @@ import hashlib
 import os
 from pathlib import Path
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from test_django.forms import TaskForm
 from test_django.models import Worker, Task
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def index(request):
+    data = {
+        'title': 'Главная страница',
+    }
+    return render(request, 'index.html', data)
 
 
 def show_info(request):
@@ -29,3 +38,28 @@ def sign_up_log_in(request):
 
     else:
         pass
+
+
+def create(request):
+    error = ''
+    if request.method == 'POST':
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tasks_home')
+        else:
+            error = "Форма заполнена некорректно"
+
+    form = TaskForm()
+
+    data = {
+        'form': form,
+        'error': error
+    }
+
+    return render(request, 'create.html', data)
+
+
+def tasks_home(request):
+    tasks = Task.objects.order_by('-date_control')
+    return render(request, 'tasks_home.html', {'tasks': tasks})

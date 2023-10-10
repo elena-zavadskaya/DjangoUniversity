@@ -44,12 +44,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
+                {% for task in tasks %}
+                    {% if task.task_status == 1 %}
+                        <tr class="table-success">
+                    {% elif task.task_status == 0 %}
+                        <tr class="table-danger">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                            <th scope="row">1</th>
+                            <td>{{ task.leader }}</td>
+                            <td>{{ task.task_status }}</td>
+                            <td>{{ task.date_control }}</td>
+                        </tr>
+                {% endfor %}
+
           </tbody>
         </table>
         </div>

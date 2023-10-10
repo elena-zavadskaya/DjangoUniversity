@@ -23,7 +23,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  width: 450px;
+  width: 650px;
   height: 600px;
   border-radius: 10px;
   box-shadow: 0 10px 25px 5px rgba(255, 192, 203,0.2);
@@ -35,7 +35,7 @@ body {
     top: 0;
     right: 0;
     left: 0;
-    width: 500px;
+    width: 700px;
     height: 80px;
     background: rebeccapurple;
     animation: dsTop 1.5s;
@@ -126,7 +126,7 @@ body {
     .pens, .projects, .posts {
       position: relative;
       left: -300px;
-      width: calc(450px / 3);
+      width: calc(650px / 3);
       text-align: center;
       color: white;
       animation: fadeInMove 2s;
@@ -150,11 +150,11 @@ body {
   }
   .ds-skill {
     position: absolute;
-    margin: auto;
+    margin: 0 10px 0 10px;
     bottom: 10px;
     right: 0;
     left: 0;
-    width: 200px;
+    width: 630px;
     height: 100px;
     animation: mvBottom 1.5s;
     h6 {

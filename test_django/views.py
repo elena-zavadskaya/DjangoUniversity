@@ -17,7 +17,7 @@ def show_info(request):
         # print(BASE_DIR / "static")
         return render(request, 'workerInfo.html',
                       {"worker": worker,
-                       "link_img": hashlib.md5(user.email.encode('utf-8')).hexdigest()
+                       "link_img": hashlib.md5(user.email.encode('utf-8')).hexdigest(),
                        "tasks": tasks})
     else:
         return render(request, 'notAccess.html')

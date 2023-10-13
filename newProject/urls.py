@@ -26,5 +26,5 @@ urlpatterns = [
     path('signup_login/', views.sign_up_log_in),
     path('', views.index, name='home'),
     path('create/', views.create, name='create'),
-    path('tasks_home/', views.create, name='tasks_home'),
+    path('tasks_home/', views.tasks_home, name='tasks_home'),
 ]

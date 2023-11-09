@@ -15,16 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
-import view
+from django.contrib.auth.views import LogoutView
+from django.urls import path, reverse_lazy
 from test_django import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('info/', views.show_info),
+    path('info/', views.show_info, name='info'),
     path('signup_login/', views.sign_up_log_in),
     path('', views.index, name='home'),
     path('create/', views.create, name='create'),
     path('tasks_home/', views.tasks_home, name='tasks_home'),
+    path('logout/', LogoutView.as_view(next_page=reverse_lazy('home')), name='logout'),
+    path('user_logout', views.logout_user, name='logout_user'),
 ]

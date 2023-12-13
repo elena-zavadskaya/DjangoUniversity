@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% extends "base.html" %}
+    {% load static %}
+</head>
+<body>
+{% block content %}
+    <div class="container">
+        <div class="mx-auto d-grid gap-2" style="margin-top: 35vh; width: 1000px; height: 150px">
+            <table class="table table-hover" style="background-color: white">
+                <thead style="background-color: white; text-align: center">
+                    <tr style="background-color: white">
+                        <th scope="col text-center">Имя работника</th>
+                        <th scope="col text-center">Номер последнего задания</th>
+                        <th scope="col text-center">Кол-во выполненных заданий</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider" style="background-color: white">
+                    {% for worker, sumStatus, lastTask in workers %}
+                        {% if sumStatus >= 1 %}
+                            <tr class="table-light">
+                        {% elif sumStatus <= 0 %}
+                            <tr class="table-dark">
+                        {% else %}
+                            <tr>
+                        {% endif %}
+                        <td class = "text-center"> <div style="margin-top: 20px">{{ worker.first_name }} {{ worker.last_name }}</div></td>
+
+                        {% with tmp=1 %}
+                        <td class = "text-center"><div style="margin-top: 20px">{{ lastTask }}</div></td>
+                        <td class = "text-center"><div style="margin-top: 20px">{{ sumStatus }}</div></td>
+                        {% endwith %}
+                    <td><a href="{% url 'show_worker' name id_team worker.id_user.id %}" class="btn btn-warning" style="margin-top: 20px">Открыть</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

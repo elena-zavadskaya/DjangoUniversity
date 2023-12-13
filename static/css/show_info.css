@@ -24,11 +24,12 @@ body {
   bottom: 0;
   left: 0;
   width: 650px;
-  height: 600px;
+  height: 700px;
   border-radius: 10px;
   box-shadow: 0 10px 25px 5px rgba(255, 192, 203,0.2);
-  background: #314BFF;
-  overflow: hidden;
+  background: #4f4f4f;
+  overflow-x: hidden;
+  overflow-y: scroll;
   .ds-top {
     position: absolute;
     margin: auto;
@@ -67,7 +68,7 @@ body {
     color: white;
     position: absolute;
     margin: auto;
-    top: -180px;
+    top: -300px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -75,6 +76,7 @@ body {
     height: 40px;
     text-align: center;
     animation: fadeIn 2s ease-in;
+    font-size: 2.5rem;
 
     h6 {
       position: absolute;
@@ -90,7 +92,7 @@ body {
     position: absolute;
     margin: auto;
     padding: 8px;
-    top: 20px;
+    top: 70px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -133,7 +135,7 @@ body {
       animation-fill-mode: forwards;
       h6 {
         text-transform: uppercase;
-        color: crimson;
+        color: #31F1FF;
       }
       p {
         font-size: 12px;
@@ -148,20 +150,36 @@ body {
       }
     }
   }
+  .title {
+    position: absolute;
+    margin: auto;
+    top: 250px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: inherit;
+    height: 40px;
+    font-weight: 700;
+    text-align: center;
+    color: white;
+    text-transform: uppercase;
+    animation: mvBottom 1.5s;
+  }
   .ds-skill {
     position: absolute;
     margin: 0 10px 0 10px;
+    top: 470px;
     bottom: 10px;
     right: 0;
     left: 0;
-    width: 630px;
+    width: 610px;
     height: 100px;
     animation: mvBottom 1.5s;
     h6 {
       margin-bottom: 5px;
       font-weight: 700;
       text-transform: uppercase;
-      color: crimson;
+      color: #31F1FF;
     }
     .skill {
       h6 {
@@ -172,12 +190,12 @@ body {
         color: white;
       }
       .fab {
-        color: crimson;
+        color: #31F1FF;
         font-size: 14px;
       }
       .bar {
         height: 5px;
-        background: crimson;
+        background: #31F1FF;
         text-align: right;
         p {
           color: white;
@@ -256,5 +274,9 @@ body {
 
 .following {
   color: white;
-  background: crimson;
+  background: #31F1FF;
+}
+
+.text-center {
+  margin-top: 50px
 }

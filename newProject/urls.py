@@ -22,10 +22,24 @@ from test_django import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('info/', views.show_info, name='info'),
+
     path('signup_login/', views.sign_up_log_in),
     path('', views.index, name='home'),
-    path('create/', views.create, name='create'),
+    path('show_worker/<str:name>/<int:id_team>/<int:id_user>/addtask/', views.create, name='create'),
+    path('show_worker/<str:name>/<int:id_team>/<int:id_user>/<int:number_task>/deletetask/',
+         views.delete_task, name='delete_task'),
     path('tasks_home/', views.tasks_home, name='tasks_home'),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('home')), name='logout'),
     path('user_logout', views.logout_user, name='logout_user'),
+
+    path('leaderfView/<str:name>/', views.show_team_ofProject, name='worker_ofProject'),
+    path('leaderView/<str:name>/<int:id_team>/', views.show_workerFromTeam, name='worker_fromTeam'),
+    path('leaderView/<str:name>/<int:id_team>/<int:id_user>/', views.show_worker, name='show_worker'),
+
+    # ajax url
+    path('ajax/validate_username', views.validate_username, name='validate_username'),
+    path('ajax/validate_email', views.validate_email, name='validate_email'),
+    path('ajax/check_task_number/<str:name>/<int:id_worker>/', views.check_numberTask,
+         name='check_task_number'),
+
 ]

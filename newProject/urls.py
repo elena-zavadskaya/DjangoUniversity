@@ -24,9 +24,10 @@ urlpatterns = [
     path('info/', views.show_info, name='info'),
 
     path('signup_login/', views.sign_up_log_in),
+    path('register_worker/', views.register_worker, name='register_worker'),
     path('', views.index, name='home'),
-    path('show_worker/<str:name>/<int:id_team>/<int:id_user>/addtask/', views.create, name='create'),
-    path('show_worker/<str:name>/<int:id_team>/<int:id_user>/<int:number_task>/deletetask/',
+    path('show_worker/<int:id_team>/<int:id_user>/addtask/', views.create, name='create'),
+    path('show_worker/<int:id_team>/<int:id_user>/<int:number_task>/deletetask/',
          views.delete_task, name='delete_task'),
     path('tasks_home/', views.tasks_home, name='tasks_home'),
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('home')), name='logout'),
@@ -34,12 +35,13 @@ urlpatterns = [
 
     path('leaderfView/<str:name>/', views.show_team_ofProject, name='worker_ofProject'),
     path('leaderView/<str:name>/<int:id_team>/', views.show_workerFromTeam, name='worker_fromTeam'),
-    path('leaderView/<str:name>/<int:id_team>/<int:id_user>/', views.show_worker, name='show_worker'),
+    path('leaderView/<int:id_team>/<int:id_user>/', views.show_worker, name='show_worker'),
+    path('leaderWorkerView/<int:id_team>/<int:id_worker>/', views.worker_info, name='worker_info'),
 
     # ajax url
     path('ajax/validate_username', views.validate_username, name='validate_username'),
     path('ajax/validate_email', views.validate_email, name='validate_email'),
-    path('ajax/check_task_number/<str:name>/<int:id_worker>/', views.check_numberTask,
+    path('ajax/check_task_number/<int:id_worker>/', views.check_numberTask,
          name='check_task_number'),
 
 ]

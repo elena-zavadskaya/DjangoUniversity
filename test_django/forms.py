@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from . import models
 from .models import Task, IntegerRangeField
-from django.forms import ModelForm, DateTimeInput, IntegerField, TextInput
+from django.forms import ModelForm, DateTimeInput, IntegerField, TextInput, DateInput, NumberInput
 
 from django import forms
 from bootstrap_datepicker_plus.widgets import DatePickerInput
@@ -54,3 +54,12 @@ class TaskForm(forms.Form):
 #         return date_local
 # """
 
+from .models import Worker
+from django.forms import ModelForm, TextInput, DateTimeInput, Textarea
+
+
+class WorkerForm(forms.Form):
+    name = forms.CharField(help_text="Введите имя")
+    surname = forms.CharField(help_text="Введите фамилию")
+    birth_date = forms.DateField(help_text="Выберите дату рождения", widget=DatePickerInput())
+    team = forms.IntegerField(help_text="Введите номер команды")

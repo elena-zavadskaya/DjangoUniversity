@@ -35,7 +35,7 @@ class Department(models.Model):
                             help_text="Введите название отдела", null=False, blank=False)
     description = models.TextField(verbose_name="Описание отдела", help_text="Введите описание отдела")
 
-    # teams = models.ManyToManyField(Team)
+    # teams .= models.ManyToManyField(Team)
 
     def __str__(self):
         return self.name

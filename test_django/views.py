@@ -7,7 +7,7 @@ from django.db.models import Avg
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 
-from test_django.forms import TaskForm
+from test_django.forms import TaskForm, WorkerForm
 from test_django.models import Worker, Task, Leader, Project, Team
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +40,13 @@ def index(request):
 #         return render(request, 'notAccess.html')
 
 
+def worker_info(request, id_team, id_worker):
+    return render(request, 'workerInfo.html',
+                          {"worker": Worker.objects.get(id=id_worker),
+                           "tasks": Task.objects.filter(worker_id=id_worker),
+                           "id_team": id_team
+                           })
+
 def show_info(request):  # страница начальника
     user = request.user
 
@@ -55,15 +62,13 @@ def show_info(request):  # страница начальника
             return render(request,
                           'workerInfo.html',
                           {"worker": worker,
-                           "link_img": hashlib.md5(user.email.encode('utf-8')).hexdigest(),
                            "tasks": tasks
-
                            })
     else:
         return redirect("/")
 
 
-def show_worker(request, name, id_team, id_user):  # страница сотрудника
+def show_worker(request, id_team, id_user):  # страница сотрудника
     user = request.user
     if user.is_authenticated and user.groups.filter(name="Тимлиды").exists():
         worker = Worker.objects.get(id_user_id=id_user)
@@ -75,7 +80,6 @@ def show_worker(request, name, id_team, id_user):  # страница сотру
                        "link_img": hashlib.md5(
                            User.objects.get(id=worker.id_user_id).email.encode('utf-8')).hexdigest(),
                        "tasks": tasks,
-                       "name": name,
                        "id_team": id_team,
                        })
     else:
@@ -99,17 +103,36 @@ def sign_up_log_in(request):
 
             try:
                 login(request, user)
-                return redirect("/info")
+                return render(request, 'workerInfo.html', {'worker': Worker.objects.get(id_user_id=user.id),
+                                                           'tasks': Task.objects.filter(worker_id=Worker.objects.get(id_user_id=user.id).id),
+                                                           'id_team': Worker.objects.get(id_user_id=user.id).team_id})
             except Exception:
                 print("Not correct email or pass")
-                return redirect("/")
+                return redirect("/signup_login/")
         else:
             email = request.POST.get("create_email")
             username = request.POST.get("create_user_name")
             password = request.POST.get("create_password")
             user = User.objects.create_user(email=email, username=username, password=password)
             login(request, user)
-            return redirect("/info")
+            Worker.objects.create(id_user_id=user.id)
+            return redirect("/register_worker")
+
+
+def register_worker(request):
+    if request.method == 'GET':
+        form = WorkerForm()
+        return render(request, 'registerWorker.html', {'form':form})
+    else:
+        form = WorkerForm(request.POST)
+        if form.is_valid():
+            Worker.objects.filter(id_user_id=request.user).update(first_name=form.cleaned_data['name'],
+                                  last_name=form.cleaned_data['surname'],
+                                  date_birth=form.cleaned_data['birth_date'],
+                                  team_id=form.cleaned_data['team'])
+            return redirect('/info')
+        else:
+            print("asdfasdfasdf")
 
 
 # def create(request):
@@ -140,11 +163,11 @@ def sign_up_log_in(request):
 #     return render(request, 'create.html', data)
 
 
-def create(request, name, id_team, id_user):
+def create(request, id_team, id_user):
     if request.method == "GET":
         taskForm = TaskForm()
         return render(request, "create.html",
-                      {"form": taskForm, "name": name, "id_worker": Worker.objects.get(id_user=id_user).id})
+                      {"form": taskForm, "id_worker": Worker.objects.get(id_user=id_user).id})
     else:
         taskform = TaskForm(request.POST)
         if taskform.is_valid():
@@ -153,17 +176,27 @@ def create(request, name, id_team, id_user):
             obj.number = taskform.cleaned_data['number']
             obj.task_status = taskform.cleaned_data['task_status']
             obj.date_control = taskform.cleaned_data['date_control']
-            obj.leader = Leader.objects.get(id_user_id=request.user.id)
             obj.save()
-            return redirect(f"/leaderView/{name}/{id_team}/{id_user}")
+            if User.objects.get(id=id_user).groups.filter(name="Тимлиды").exists():
+                return redirect(f"/leaderView/{name}/{id_team}/{id_user}")
+            else:
+                return render(request, 'workerInfo.html', {'worker': Worker.objects.get(id_user_id=id_user),
+                                                           'tasks': Task.objects.filter(worker_id=Worker.objects.get(id_user_id=id_user).id),
+                                                           'id_team': Worker.objects.get(id_user_id=id_user).team_id})
         else:
             return redirect("/")
 
 
-def delete_task(request, name, id_team, id_user, number_task):
+def delete_task(request, id_team, id_user, number_task):
     worker_id = Worker.objects.get(id_user_id=id_user).id
     task = Task.objects.filter(number=number_task, worker_id=worker_id).delete()
-    return redirect(f"/leaderView/{name}/{id_team}/{id_user}")
+    if User.objects.get(id=id_user).groups.filter(name="Тимлиды").exists():
+        return redirect(f"/leaderView/{name}/{id_team}/{id_user}")
+    else:
+        return render(request, 'workerInfo.html', {'worker': Worker.objects.get(id_user_id=id_user),
+                                                   'tasks': Task.objects.filter(
+                                                       worker_id=Worker.objects.get(id_user_id=id_user).id),
+                                                   'id_team': id_team})
 
 
 def tasks_home(request):
@@ -178,19 +211,20 @@ def show_team_ofProject(request, name):
 
 
 def show_workerFromTeam(request, id_team, name):
-    workers = Worker.objects.filter(team=Team.objects.get(id=id_team))
+    workers = Worker.objects.filter(team_id=id_team)
     workerAllTasks = []
     workerLastTasks = []
     for worker in workers:
         workerTasks = Task.objects.filter(worker_id=worker.id)
-        task_status = worker.task_set.values_list('task_status', flat=True)
-        sumStatus = sum(task_status)
-        workerAllTasks.append(sumStatus)
-        workerLastTasks.append(max(map(lambda x: x.number, workerTasks)))
+        if workerTasks:
+            task_status = worker.task_set.values_list('task_status', flat=True)
+            sumStatus = sum(task_status)
+            workerAllTasks.append(sumStatus)
+            workerLastTasks.append(max(map(lambda x: x.number, workerTasks)))
 
     workers = zip(workers, workerAllTasks, workerLastTasks)
     return render(request, 'leaderViewWorker.html',
-                  {"workers": workers, "name": name, "id_team": id_team})
+                  {"workers": workers, "id_team": id_team})
 
 
 # AJAX view
@@ -210,12 +244,11 @@ def validate_email(request):
     return JsonResponse(response)
 
 
-def check_numberTask(request, name, id_worker):
+def check_numberTask(request, id_worker):
     number = int(request.GET.get('number', None))
     if (number == ""):
         number = 0
-    project_obj = Project.objects.get(name=name)
     response = {
-        'exist': Task.objects.filter(number=number, project=project_obj, worker_id=id_worker).exists()
+        'exist': Task.objects.filter(number=number, worker_id=id_worker).exists()
     }
     return JsonResponse(response)

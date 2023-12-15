@@ -34,7 +34,7 @@
                         <td class = "text-center"><div style="margin-top: 20px">{{ lastTask }}</div></td>
                         <td class = "text-center"><div style="margin-top: 20px">{{ sumStatus }}</div></td>
                         {% endwith %}
-                    <td><a href="{% url 'show_worker' name id_team worker.id_user.id %}" class="btn btn-warning" style="margin-top: 20px">Открыть</a></td>
+                    <td><a href="{% url 'worker_info' id_team worker.id %}" class="btn btn-warning" style="margin-top: 20px">Открыть</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

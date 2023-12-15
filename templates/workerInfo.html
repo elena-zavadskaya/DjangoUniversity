@@ -20,7 +20,7 @@
                 {{ worker.first_name }} {{ worker.last_name }}
               </div>
             <div class="task" style= "margin-top:260px; margin-left:250px">
-                <a href="{% url 'create' name id_team worker.id_user_id %}" type="button" class="btn btn btn-light">Добавить проект</a>
+                <a href="{% url 'create' worker.team_id worker.id_user_id %}" type="button" class="btn btn btn-light">Добавить задание</a>
             </div>
               <div class="ds-info">
                 <div class="ds pens">
@@ -60,7 +60,7 @@
                                 <td style= "text-align: center" >{{ task.task_status }}</td>
                                 <td style= "text-align: center">{{ task.date_control }}</td>
                     <td>
-                    <a href="{% url 'delete_task' name id_team worker.id_user_id task.number %}" type="button" class="btn btn-danger">Удалить</a>
+                    <a href="{% url 'delete_task' id_team worker.id_user_id task.number %}" type="button" class="btn btn-danger">Удалить</a>
                     </td>
                             </tr>
                     {% endfor %}

@@ -38,7 +38,7 @@
             $.ajax(
                 {
                     data: $(this).serialize(),
-                    url: "{% url 'check_task_number' name id_worker %}",
+                    url: "{% url 'check_task_number' id_worker %}",
                     success:
                     function (response){
                        if ($('#numberError').length == 0)

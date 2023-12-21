@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('info/', views.show_info, name='info'),
 
-    path('signup_login/', views.sign_up_log_in),
+    path('signup_login/', views.sign_up_log_in, name='signup_login'),
     path('register_worker/', views.register_worker, name='register_worker'),
     path('', views.index, name='home'),
     path('show_worker/<int:id_team>/<int:id_user>/addtask/', views.create, name='create'),
@@ -38,10 +38,12 @@ urlpatterns = [
     path('leaderView/<int:id_team>/<int:id_user>/', views.show_worker, name='show_worker'),
     path('leaderWorkerView/<int:id_team>/<int:id_worker>/', views.worker_info, name='worker_info'),
 
+    path(r'change/<int:id_worker>/<int:task_number>/<int:task_status>/(?P<date_control>\d{4}-\d{2}-\d{2}-\d{2}-\d{2})/',
+         views.change, name='change'),
+
     # ajax url
     path('ajax/validate_username', views.validate_username, name='validate_username'),
     path('ajax/validate_email', views.validate_email, name='validate_email'),
-    path('ajax/check_task_number/<int:id_worker>/', views.check_numberTask,
-         name='check_task_number'),
+    path('ajax/check_task_number/<int:id_worker>/', views.check_numberTask, name='check_task_number'),
 
 ]

@@ -11,6 +11,8 @@
                 <div class="alert alert-warning">
                     <h3>{{ task.worker }}</h3>
                     <p>{{ task.leader }}</p>
+                    {{ task.date_control }}
+                    Статус: {{ task.task_status }}
                 </div>
             {% endfor %}
         {% else %}

@@ -9,6 +9,7 @@ from django.forms import ModelForm, DateTimeInput, IntegerField, TextInput, Date
 from django import forms
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 
+
 # class TaskForm(ModelForm):
 #     class Meta:
 #         model = Task
@@ -42,8 +43,12 @@ from bootstrap_datepicker_plus.widgets import DatePickerInput
 #         }
 class TaskForm(forms.Form):
     number = forms.IntegerField(help_text="Введите номер задания", min_value=1)
-    task_status = forms.IntegerField(help_text="Введите статус задания (1 - задание выполнено, 0 - задание не выполнено)", min_value=0, max_value=1)
+    task_status = forms.IntegerField(
+        help_text="Введите статус задания (1 - задание выполнено, 0 - задание не выполнено)", min_value=0, max_value=1)
     date_control = forms.DateField(help_text="Выберите дату сдачи задания", widget=DatePickerInput())
+
+
+
 #
 # """
 #     def clean_date_control(self):
@@ -63,3 +68,7 @@ class WorkerForm(forms.Form):
     surname = forms.CharField(help_text="Введите фамилию")
     birth_date = forms.DateField(help_text="Выберите дату рождения", widget=DatePickerInput())
     team = forms.IntegerField(help_text="Введите номер команды")
+
+    class Meta:
+        model = Worker
+        fields = ['name', 'surname', 'birth_date', 'team']

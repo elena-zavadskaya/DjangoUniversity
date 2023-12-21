@@ -1,18 +1,33 @@
-{% extends 'layout.html' %}
-
-{% block title %}Форма для добавления статьи{% endblock %}
-
-{% block content %}
-    <div class="features">
-        <h1>Форма для добавления статьи</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.name }}<br>
-            {{ form.surname }}<br>
-            {{ form.birth_date }}<br>
-            {{ form.team }}<br>
-            <span>{{ error }}</span>
-            <button type="submit" class="btn btn-success">Добавить статью</button>
-        </form>
-    </div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login_worker.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+</head>
+<body>
+    <header>
+        <div class="login">
+            <div class="form">
+                 <h2>Введите данные, чтобы завершить регистрацию1</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" placeholder="Имя" name="name">
+                    <input type="text" placeholder="Фамилия" name="surname">
+                    <input type="number" placeholder="Номер команды" name="team">
+                    <input type="date" placeholder="День рождения" name="birth_date">
+                    <span>{{ error }}</span>
+{#                    <button type="submit" class="btn btn-success">Сохранить</button>#}
+                    <input type="submit" value="Сохранить" class="submit">
+                </form>
+            </div>
+        </div>
+    </header>
+</body>
+</html>

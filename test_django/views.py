@@ -41,11 +41,12 @@ def index(request):
 
 
 def worker_info(request, id_team, id_worker):
-    return render(request, 'workerInfo.html',
-                          {"worker": Worker.objects.get(id=id_worker),
-                           "tasks": Task.objects.filter(worker_id=id_worker),
-                           "id_team": id_team
-                           })
+    return render(request, 'workerInfoFromLeader.html',
+                  {"worker": Worker.objects.get(id=id_worker),
+                   "tasks": Task.objects.filter(worker_id=id_worker),
+                   "id_team": id_team
+                   })
+
 
 def show_info(request):  # страница начальника
     user = request.user
@@ -104,7 +105,8 @@ def sign_up_log_in(request):
             try:
                 login(request, user)
                 return render(request, 'workerInfo.html', {'worker': Worker.objects.get(id_user_id=user.id),
-                                                           'tasks': Task.objects.filter(worker_id=Worker.objects.get(id_user_id=user.id).id),
+                                                           'tasks': Task.objects.filter(
+                                                               worker_id=Worker.objects.get(id_user_id=user.id).id),
                                                            'id_team': Worker.objects.get(id_user_id=user.id).team_id})
             except Exception:
                 print("Not correct email or pass")
@@ -122,14 +124,14 @@ def sign_up_log_in(request):
 def register_worker(request):
     if request.method == 'GET':
         form = WorkerForm()
-        return render(request, 'registerWorker.html', {'form':form})
+        return render(request, 'registerWorker.html', {'form': form})
     else:
         form = WorkerForm(request.POST)
         if form.is_valid():
             Worker.objects.filter(id_user_id=request.user).update(first_name=form.cleaned_data['name'],
-                                  last_name=form.cleaned_data['surname'],
-                                  date_birth=form.cleaned_data['birth_date'],
-                                  team_id=form.cleaned_data['team'])
+                                                                  last_name=form.cleaned_data['surname'],
+                                                                  date_birth=form.cleaned_data['birth_date'],
+                                                                  team_id=form.cleaned_data['team'])
             return redirect('/info')
         else:
             print("asdfasdfasdf")
@@ -180,9 +182,12 @@ def create(request, id_team, id_user):
             if User.objects.get(id=id_user).groups.filter(name="Тимлиды").exists():
                 return redirect(f"/leaderView/{name}/{id_team}/{id_user}")
             else:
-                return render(request, 'workerInfo.html', {'worker': Worker.objects.get(id_user_id=id_user),
-                                                           'tasks': Task.objects.filter(worker_id=Worker.objects.get(id_user_id=id_user).id),
-                                                           'id_team': Worker.objects.get(id_user_id=id_user).team_id})
+                return render(request, 'workerInfoFromLeader.html', {'worker': Worker.objects.get(id_user_id=id_user),
+                                                                     'tasks': Task.objects.filter(
+                                                                         worker_id=Worker.objects.get(
+                                                                             id_user_id=id_user).id),
+                                                                     'id_team': Worker.objects.get(
+                                                                         id_user_id=id_user).team_id})
         else:
             return redirect("/")
 
@@ -193,10 +198,10 @@ def delete_task(request, id_team, id_user, number_task):
     if User.objects.get(id=id_user).groups.filter(name="Тимлиды").exists():
         return redirect(f"/leaderView/{name}/{id_team}/{id_user}")
     else:
-        return render(request, 'workerInfo.html', {'worker': Worker.objects.get(id_user_id=id_user),
-                                                   'tasks': Task.objects.filter(
-                                                       worker_id=Worker.objects.get(id_user_id=id_user).id),
-                                                   'id_team': id_team})
+        return render(request, 'workerInfoFromLeader.html', {'worker': Worker.objects.get(id_user_id=id_user),
+                                                             'tasks': Task.objects.filter(
+                                                                 worker_id=Worker.objects.get(id_user_id=id_user).id),
+                                                             'id_team': id_team})
 
 
 def tasks_home(request):
@@ -252,3 +257,30 @@ def check_numberTask(request, id_worker):
         'exist': Task.objects.filter(number=number, worker_id=id_worker).exists()
     }
     return JsonResponse(response)
+
+
+def change(request, id_worker, task_number, task_status, date_control):
+    if request.method == "GET":
+        taskForm = TaskForm()
+        return render(request, "change.html",
+                      {"form": taskForm,
+                       "id_worker": id_worker,
+                       "task_number": task_number,
+                       "task_status": task_status,
+                       "date_control": date_control})
+    else:
+        taskform = TaskForm(request.POST)
+        if taskform.is_valid():
+            task = Task.objects.get(number=task_number, worker_id=id_worker)
+            task.number = taskform.cleaned_data['number']
+            task.task_status = taskform.cleaned_data['task_status']
+            task.date_control = taskform.cleaned_data['date_control']
+            task.save()
+
+            return render(request, 'workerInfoFromLeader.html',
+                          {"worker": Worker.objects.get(id=id_worker),
+                           "tasks": Task.objects.filter(worker_id=id_worker),
+                           "id_team": Worker.objects.get(id=id_worker).team_id
+                           })
+        else:
+            return redirect("/")

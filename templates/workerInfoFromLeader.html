@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Информация о сотруднике</title>
+        {% extends "base.html" %}
+
+        {% load static %}
+        <link rel = "stylesheet" type="text/css" href="{% static 'css/show_info.css' %}"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    </head>
+    <body>
+        {% block content %}
+            <div class="card">
+              <div class="ds-top"></div>
+              <div class="avatar-holder">
+                <img src="https://www.gravatar.com/avatar/%7B%7B link_img }}?s=100&d=retro" alt="Albert Einstein">
+              </div>
+              <div class="name">
+                {{ worker.first_name }} {{ worker.last_name }}
+              </div>
+            <div class="task" style= "margin-top:260px; margin-left:250px">
+                <a href="{% url 'create' worker.team_id worker.id_user_id %}" type="button" class="btn btn btn-light">Добавить задание</a>
+            </div>
+              <div class="ds-info">
+                <div class="ds pens">
+                    <i class="bi bi-patch-check"></i><h6 title="Number of pens created by the user">Команда</h6>
+                  <p>{{ worker.team }}</p>
+                </div>
+                <div class="ds projects">
+                    <i class="bi bi-chat-square-heart"></i><h6 title="Number of pens created by the user">id пользователя</h6>
+                    <p>{{ worker.id_user }}</p>
+                </div>
+                <div class="ds posts">
+                  <i class="bi bi-people-fill"></i><h6 title="Number of pens created by the user">Дата рождения</h6>
+                  <p>{{ worker.date_birth }}</p>
+                </div>
+              </div>
+
+            <div class="title">Список заданий</div>
+                <table class="table ds-skill" style="color: #fff">
+                    <thead>
+                        <tr style= "color: #31F1FF; animation: fadeIn 5s;">
+                          <th scope="col" style= "text-align: center; width: 100px">Номер задания</th>
+                          <th scope="col" style= "text-align: center">Статус</th>
+                          <th scope="col" style= "text-align: center">Дата сдачи</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                            {% for task in tasks %}
+                                {% if task.task_status == 1 %}
+                                    <tr class="table-light">
+                                {% elif task.task_status == 0 %}
+                                    <tr class="table-dark">
+                                {% else %}
+                                    <tr>
+                                {% endif %}
+                                        <th scope="row" style= "text-align: center">{{ task.number }}</th>
+                                        <td style= "text-align: center" >{{ task.task_status }}</td>
+                                        <td style= "text-align: center">{{ task.date_control }}</td>
+                                        <td>
+                                        <a href="{% url 'change' worker.id task.number task.task_status task.date_control %}" type="button" class="btn btn-success">Изменить</a>
+                                        </td>
+                                        <td>
+                                        <a href="{% url 'delete_task' id_team worker.id_user_id task.number %}" type="button" class="btn btn-danger">Удалить</a>
+                                        </td>
+                                    </tr>
+                            {% endfor %}
+                      </tbody>
+                </table>
+            </div>
+        {% endblock %}
+    </body>
+</html>

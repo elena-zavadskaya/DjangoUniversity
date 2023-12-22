@@ -26,20 +26,6 @@ def index(request):
     return render(request, 'index.html', data)
 
 
-# def show_info(request): #страница сотрудника
-#     user = request.user
-#     if user.is_authenticated and user.groups.name == 'Тимлиды':
-#         worker = Worker.objects.get(id_user_id=user.id)
-#         tasks = Task.objects.filter(worker=worker.id)
-#         tasks = list(tasks)
-#         return render(request, 'workerInfo.html',
-#                       {"worker": worker,
-#                        "link_img": hashlib.md5(user.email.encode('utf-8')).hexdigest(),
-#                        "tasks": tasks})
-#     else:
-#         return render(request, 'notAccess.html')
-
-
 def worker_info(request, id_team, id_worker):
     return render(request, 'workerInfoFromLeader.html',
                   {"worker": Worker.objects.get(id=id_worker),
@@ -48,7 +34,7 @@ def worker_info(request, id_team, id_worker):
                    })
 
 
-def show_info(request):  # страница начальника
+def show_info(request):
     user = request.user
 
     if user.is_authenticated:
@@ -69,7 +55,7 @@ def show_info(request):  # страница начальника
         return redirect("/")
 
 
-def show_worker(request, id_team, id_user):  # страница сотрудника
+def show_worker(request, id_team, id_user):
     user = request.user
     if user.is_authenticated and user.groups.filter(name="Тимлиды").exists():
         worker = Worker.objects.get(id_user_id=id_user)
@@ -135,34 +121,6 @@ def register_worker(request):
             return redirect('/info')
         else:
             print("asdfasdfasdf")
-
-
-# def create(request):
-#     error = ''
-#     if request.method == 'POST':
-#         form = TaskForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('tasks_home')
-#             obj = Task()
-#             obj.worker = Worker.objects.get(id_user__id=id_user).id
-#             obj.number = form.cleaned_data['number']
-#             obj.task_status = form.cleaned_data['task_status']
-#             obj.date_control = form.cleaned_data['date_control']
-#             obj.leader = Leader.objects.get(id_user_id=request.user.id)
-#             obj.save()
-#             return redirect(f"/showworker/{id_user}")
-#         else:
-#             error = "Форма заполнена некорректно"
-#
-#     form = TaskForm()
-#
-#     data = {
-#         'form': form,
-#         'error': error
-#     }
-#
-#     return render(request, 'create.html', data)
 
 
 def create(request, id_team, id_user):
